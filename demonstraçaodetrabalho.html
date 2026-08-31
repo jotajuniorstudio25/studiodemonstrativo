@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Serenata Studio</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:4px;
+    background:transparent;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#fff;
+}
+
+.container{
+    width:100%;
+    max-width:650px;
+    margin:auto;
+}
+
+
+/* ==============================
+   CABEÇALHO
+============================== */
+
+.header{
+    background:#111;
+    border:1px solid #f5c400;
+    border-radius:10px;
+    padding:11px 10px;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.header h1{
+    margin:0;
+    color:#f5c400;
+    font-size:19px;
+}
+
+.header p{
+    margin:3px 0 0;
+    color:#999;
+    font-size:10px;
+}
+
+
+/* ==============================
+   CATEGORIAS
+============================== */
+
+.category{
+    color:#f5c400;
+    font-size:13px;
+    font-weight:bold;
+    margin:12px 2px 6px;
+    padding-bottom:4px;
+    border-bottom:1px solid #333;
+}
+
+
+/* ==============================
+   PLAYER
+============================== */
+
+.audio-box{
+    background:#111;
+    border:1px solid #292929;
+    border-radius:8px;
+    padding:8px 9px;
+    margin-bottom:5px;
+    transition:.2s;
+}
+
+.audio-box:hover{
+    border-color:#555;
+}
+
+.audio-box.playing{
+    border-color:#f5c400;
+    box-shadow:0 0 7px rgba(245,196,0,.15);
+}
+
+
+/* ==============================
+   TÍTULO
+============================== */
+
+.audio-title{
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:6px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+
+/* ==============================
+   CONTROLES
+============================== */
+
+.controls{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+
+/* ==============================
+   PLAY
+============================== */
+
+.play{
+    width:30px;
+    height:30px;
+    min-width:30px;
+
+    border:0;
+    border-radius:50%;
+
+    background:#f5c400;
+    color:#111;
+
+    font-size:12px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.15s;
+}
+
+.play:hover{
+    transform:scale(1.06);
+}
+
+
+/* ==============================
+   PROGRESSO
+============================== */
+
+.progress{
+    flex:1;
+    height:4px;
+
+    accent-color:#f5c400;
+
+    cursor:pointer;
+}
+
+
+/* ==============================
+   TEMPO
+============================== */
+
+.time{
+    color:#999;
+    font-size:9px;
+    min-width:68px;
+    text-align:right;
+}
+
+
+/* ==============================
+   VOLUME
+============================== */
+
+.volume{
+    width:45px;
+    height:4px;
+
+    accent-color:#f5c400;
+}
+
+
+/* ==============================
+   CELULAR
+============================== */
+
+@media(max-width:500px){
+
+    body{
+        padding:3px;
+    }
+
+    .header h1{
+        font-size:17px;
+    }
+
+    .header p{
+        font-size:9px;
+    }
+
+    .category{
+        font-size:12px;
+    }
+
+    .audio-title{
+        font-size:11px;
+    }
+
+    .time{
+        min-width:60px;
+        font-size:8px;
+    }
+
+    .volume{
+        width:38px;
+    }
+
+}
+
+
+@media(max-width:360px){
+
+    .volume{
+        width:30px;
+    }
+
+    .time{
+        min-width:55px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- ==============================
+     CABEÇALHO
+============================== -->
+
+<div class="header">
+
+<h1>🎙️ SERENATA STUDIO</h1>
+
+<p>
+Produção de áudio para rádio, lojas e empresas
+</p>
+
+</div>
+
+
+<div id="players"></div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================================
+   GITHUB PAGES
+========================================================= */
+
+const GITHUB =
+"https://jotajuniorstudio25.github.io/sudioserenata/";
+
+
+
+/* =========================================================
+   SEUS ÁUDIOS
+========================================================= */
+
+const audios = [
+
+/* ==============================
+   ABERTURAS DE PROGRAMAS
+============================== */
+
+{
+categoria:"🎙️ ABERTURAS DE PROGRAMAS",
+titulo:"Abertura 2 Programa Show da Noite",
+arquivo:"Abertura 2 Programa Show da Noite.mp3"
+},
+
+{
+categoria:"🎙️ ABERTURAS DE PROGRAMAS",
+titulo:"Abertura Programa Fim de Tarde",
+arquivo:"Abertura Programa Fim de Tarde.mp3"
+},
+
+{
+categoria:"🎙️ ABERTURAS DE PROGRAMAS",
+titulo:"Abertura Programa Gospel Hits",
+arquivo:"Abertura Programa Gospel Hits.mp3"
+},
+
+{
+categoria:"🎙️ ABERTURAS DE PROGRAMAS",
+titulo:"Abertura Programa Love Night",
+arquivo:"Abertura Programa Love Night.mp3"
+},
+
+{
+categoria:"🎙️ ABERTURAS DE PROGRAMAS",
+titulo:"Abertura Programa Show da Noite",
+arquivo:"Abertura Programa Show da Noite.mp3"
+},
+
+{
+categoria:"🎙️ ABERTURAS DE PROGRAMAS",
+titulo:"Abertura Programa Show da Tarde",
+arquivo:"Abertura Programa Show da Tarde.mp3"
+},
+
+
+
+/* ==============================
+   CHAMADAS DE RÁDIO
+============================== */
+
+{
+categoria:"📻 CHAMADAS DE RÁDIO",
+titulo:"Chamada da Rádio Gênero Musical 2",
+arquivo:"Chamada da Rádio Gênero musical 2.mp3"
+},
+
+{
+categoria:"📻 CHAMADAS DE RÁDIO",
+titulo:"Chamada da Rádio Gênero Musical",
+arquivo:"Chamada da Rádio Gênero Musical.mp3"
+},
+
+{
+categoria:"📻 CHAMADAS DE RÁDIO",
+titulo:"Chamada Institucional Rádio 2",
+arquivo:"Chamada Institucional Rádio 2.mp3"
+},
+
+{
+categoria:"📻 CHAMADAS DE RÁDIO",
+titulo:"Chamada Institucional Rádio",
+arquivo:"Chamada institucional Rádio.mp3"
+},
+
+
+
+/* ==============================
+   CHAMADAS RÁDIO INDOOR
+============================== */
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor - Mercado",
+arquivo:"Chamada radio Indoor - Mercado.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor - Setor Infantil",
+arquivo:"Chamada Rádio Indoor - Setor Infantil.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor 2 - Mercado",
+arquivo:"Chamada Rádio Indoor 2 - Mercado.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor 2",
+arquivo:"Chamada Rádio Indoor 2.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor 3 - Mercado",
+arquivo:"Chamada Rádio Indoor 3 - Mercado.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor 4 - Mercado",
+arquivo:"Chamada Rádio Indoor 4 - Mercado.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor 5 - Mercado",
+arquivo:"Chamada Rádio Indoor 5 - Mercado.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor Loja 2",
+arquivo:"Chamada Rádio Indoor Loja 2.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor Loja",
+arquivo:"Chamada Rádio Indoor Loja.mp3"
+},
+
+{
+categoria:"🛒 CHAMADAS RÁDIO INDOOR",
+titulo:"Chamada Rádio Indoor",
+arquivo:"Chamada Rádio Indoor.mp3"
+},
+
+
+
+/* ==============================
+   ENCERRAMENTOS
+============================== */
+
+{
+categoria:"🎙️ ENCERRAMENTOS DE PROGRAMAS",
+titulo:"Encerramento de Programa Gospel Hits",
+arquivo:"Encerramento de Programa Gospel Hits.mp3"
+},
+
+
+
+/* ==============================
+   JINGLES
+============================== */
+
+{
+categoria:"🎵 JINGLES",
+titulo:"Jingle de Loja - Ponto da Moda 2",
+arquivo:"Jingle de Loja - Ponto da Moda 2.mp3"
+},
+
+{
+categoria:"🎵 JINGLES",
+titulo:"Jingle de Loja - Ponto da Moda",
+arquivo:"Jingle de Loja - Ponto da Moda.mp3"
+},
+
+{
+categoria:"🎵 JINGLES",
+titulo:"Jingle de Rádio - Exemplo Serenata 2",
+arquivo:"Jingle de Rádio - Exemplo Serenata 2.mp3"
+},
+
+{
+categoria:"🎵 JINGLES",
+titulo:"Jingle de Rádio - Exemplo Serenata",
+arquivo:"Jingle de rádio - Exemplo Serenata.mp3"
+},
+
+{
+categoria:"🎵 JINGLES",
+titulo:"Jingle de Rádio Para Música",
+arquivo:"Jingle de Rádio Para Música.mp3"
+},
+
+{
+categoria:"🎵 JINGLES",
+titulo:"Jingle de Supermercado",
+arquivo:"Jingle de Supermercado.mp3"
+},
+
+{
+categoria:"🎵 JINGLES",
+titulo:"Jingle Programa Show da Noite",
+arquivo:"Jingle Programa Show da Noite.mp3"
+},
+
+{
+categoria:"🎵 JINGLES",
+titulo:"Jingle Rádio Serenata",
+arquivo:"Jingle Rádio Serenata.mp3"
+},
+
+
+
+/* ==============================
+   LOCUÇÃO INDOOR
+============================== */
+
+{
+categoria:"🛒 LOCUÇÃO INDOOR",
+titulo:"Locução Indoor Mercado - Açougue",
+arquivo:"locução indoor mercado - açougue.mp3"
+},
+
+{
+categoria:"🛒 LOCUÇÃO INDOOR",
+titulo:"Locução Início de Programa Gospel Hits",
+arquivo:"Locução Início de Programa Gospel Hits.mp3"
+},
+
+{
+categoria:"🛒 LOCUÇÃO INDOOR",
+titulo:"Locução Rádio Indoor Loja 2",
+arquivo:"Locução Rádio Indoor Loja 2.mp3"
+},
+
+{
+categoria:"🛒 LOCUÇÃO INDOOR",
+titulo:"Locução Rádio Indoor Loja",
+arquivo:"Locução Rádio Indoor Loja.mp3"
+},
+
+
+
+/* ==============================
+   LOCUÇÃO / SEQUÊNCIA
+============================== */
+
+{
+categoria:"🎧 LOCUÇÃO / SEQUÊNCIA DE PROGRAMAS",
+titulo:"Locutora ao Vivo - Sequência de Programa - Gospel Hits",
+arquivo:"Locutora ao Vivo - Sequência de Programa - Gospel Hits.mp3"
+},
+
+{
+categoria:"🎧 LOCUÇÃO / SEQUÊNCIA DE PROGRAMAS",
+titulo:"Locutora ao Vivo na Sequência do Programa Gospel Hits",
+arquivo:"Locutora ao Vivo na Sequência do Programa Gospel Hits.mp3"
+},
+
+{
+categoria:"🎧 LOCUÇÃO / SEQUÊNCIA DE PROGRAMAS",
+titulo:"Locutora ao Vivo no Programa Flashback",
+arquivo:"Locutora ao Vivo no Programa Flashback.mp3"
+},
+
+
+
+/* ==============================
+   PROGRAMETES
+============================== */
+
+{
+categoria:"📻 PROGRAMETES",
+titulo:"Programete - Dicas para o Inverno",
+arquivo:"Programete - Dicas para o inverno.mp3"
+},
+
+{
+categoria:"📻 PROGRAMETES",
+titulo:"Quadro de Programa - A Música que Marcou",
+arquivo:"Quadro de programa - A música que marcou.mp3"
+},
+
+
+
+/* ==============================
+   SEQUÊNCIAS DE PROGRAMAS
+============================== */
+
+{
+categoria:"🎧 SEQUÊNCIAS DE PROGRAMAS",
+titulo:"Sequência de Programa Flashback 2",
+arquivo:"Sequência de Programa Flashback 2.mp3"
+},
+
+{
+categoria:"🎧 SEQUÊNCIAS DE PROGRAMAS",
+titulo:"Sequência do Programa Flashback 1",
+arquivo:"Sequência do Programa Flashback 1.mp3"
+},
+
+
+
+/* ==============================
+   SPOTS COMERCIAIS
+============================== */
+
+{
+categoria:"📢 SPOTS COMERCIAIS",
+titulo:"Spot - Demonstração de Trabalho - Alguns Exemplos",
+arquivo:"Spot - Demonstração de trabalho -Alguns exemplos.mp3"
+},
+
+{
+categoria:"📢 SPOTS COMERCIAIS",
+titulo:"Spot 2 Anuncie na Rádio",
+arquivo:"Spot 2 Anuncie na Rádio.mp3"
+},
+
+{
+categoria:"📢 SPOTS COMERCIAIS",
+titulo:"Spot Anuncie na Rádio",
+arquivo:"Spot Anuncie na Rádio.mp3"
+},
+
+{
+categoria:"📢 SPOTS COMERCIAIS",
+titulo:"Spot Comercial - Propaganda Coca Cola",
+arquivo:"Spot comercial - Propaganda Coca cola.mp3"
+},
+
+{
+categoria:"📢 SPOTS COMERCIAIS",
+titulo:"Spot Comercial Encarte Digital 1",
+arquivo:"Spot Comercial Encarte Digital 1.mp3"
+},
+
+{
+categoria:"📢 SPOTS COMERCIAIS",
+titulo:"Spot Comercial Encarte Digital 2",
+arquivo:"Spot Comercial Encarte Digital 2.mp3"
+},
+
+{
+categoria:"📢 SPOTS COMERCIAIS",
+titulo:"Spot Comercial Loja de Roupas - Bella Modas",
+arquivo:"Spot comercial loja de roupas - Bella modas.mp3"
+},
+
+
+
+/* ==============================
+   VINHETAS
+============================== */
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinhet de Programa de Rádio",
+arquivo:"Vinhet de programa de rádio.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta de Abertura de Programa Love Night",
+arquivo:"Vinheta de Abertura de Programa Love Night.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta de Passagem - Show da Manhã",
+arquivo:"Vinheta de Passagem - Show da Manhã.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta de Passagem - Você está Ouvindo Programa Show da Noite",
+arquivo:"Vinheta de Passagem - Você está Ouvindo Programa Show da Noite.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta de Passagem - Você está ouvindo",
+arquivo:"Vinheta de Passagem - Você está ouvindo.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta de Passagem Programa Fim de Tarde 2",
+arquivo:"Vinheta de Passagem Programa Fim de Tarde 2.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta de Passagem Programa Fim de Tarde",
+arquivo:"Vinheta de Passagem Programa Fim de Tarde.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta de Passagem Programa Show da Manhã",
+arquivo:"Vinheta de Passagem Programa Show da Manhã.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta de Rádio",
+arquivo:"Vinheta de Rádio.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta Off - Para Música",
+arquivo:"Vinheta Off - Para Música.mp3"
+},
+
+{
+categoria:"🎚️ VINHETAS",
+titulo:"Vinheta Passagem Rádio Serenata",
+arquivo:"Vinheta Passagem Rádio Serenata.mp3"
+}
+
+];
+
+
+
+/* =========================================================
+   CRIAÇÃO DOS PLAYERS
+========================================================= */
+
+const area =
+document.getElementById("players");
+
+const players = [];
+
+let categoriaAtual = "";
+
+
+
+audios.forEach((item,index)=>{
+
+
+    /* ==========================
+       CRIA CATEGORIA
+    ========================== */
+
+    if(item.categoria !== categoriaAtual){
+
+        categoriaAtual =
+        item.categoria;
+
+        const categoria =
+        document.createElement("div");
+
+        categoria.className =
+        "category";
+
+        categoria.textContent =
+        categoriaAtual;
+
+        area.appendChild(categoria);
+    }
+
+
+
+    /* ==========================
+       CRIA PLAYER
+    ========================== */
+
+    const box =
+    document.createElement("div");
+
+    box.className =
+    "audio-box";
+
+
+    box.innerHTML = `
+
+        <div class="audio-title">
+            ${item.titulo}
+        </div>
+
+        <div class="controls">
+
+            <button
+                class="play"
+                id="play${index}">
+                ▶
+            </button>
+
+            <input
+                class="progress"
+                id="progress${index}"
+                type="range"
+                min="0"
+                max="100"
+                value="0">
+
+            <span
+                class="time"
+                id="time${index}">
+                00:00 / 00:00
+            </span>
+
+            <input
+                class="volume"
+                id="volume${index}"
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value="1">
+
+        </div>
+
+        <audio
+            id="audio${index}"
+            src="${GITHUB}${encodeURIComponent(item.arquivo)}"
+            preload="metadata">
+        </audio>
+
+    `;
+
+
+    area.appendChild(box);
+
+
+
+    /* ==========================
+       ELEMENTOS
+    ========================== */
+
+    const audio =
+    document.getElementById(
+        "audio"+index
+    );
+
+    const button =
+    document.getElementById(
+        "play"+index
+    );
+
+    const progress =
+    document.getElementById(
+        "progress"+index
+    );
+
+    const time =
+    document.getElementById(
+        "time"+index
+    );
+
+    const volume =
+    document.getElementById(
+        "volume"+index
+    );
+
+
+    players.push({
+        audio:audio,
+        button:button,
+        box:box
+    });
+
+
+
+    /* ==========================
+       PLAY / PAUSE
+    ========================== */
+
+    button.addEventListener(
+        "click",
+        function(){
+
+            players.forEach(
+                function(player,i){
+
+                    if(i !== index){
+
+                        player.audio.pause();
+
+                        player.button.textContent =
+                        "▶";
+
+                        player.box.classList.remove(
+                            "playing"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            if(audio.paused){
+
+                audio.play()
+                .then(function(){
+
+                    button.textContent =
+                    "❚❚";
+
+                    box.classList.add(
+                        "playing"
+                    );
+
+                })
+                .catch(function(error){
+
+                    console.log(
+                        "Erro ao reproduzir:",
+                        error
+                    );
+
+                });
+
+            }else{
+
+                audio.pause();
+
+                button.textContent =
+                "▶";
+
+                box.classList.remove(
+                    "playing"
+                );
+
+            }
+
+        }
+    );
+
+
+
+    /* ==========================
+       METADADOS
+    ========================== */
+
+    audio.addEventListener(
+        "loadedmetadata",
+        function(){
+
+            time.textContent =
+            "00:00 / " +
+            formatTime(
+                audio.duration
+            );
+
+        }
+    );
+
+
+
+    /* ==========================
+       PROGRESSO
+    ========================== */
+
+    audio.addEventListener(
+        "timeupdate",
+        function(){
+
+            if(audio.duration){
+
+                progress.value =
+                (
+                    audio.currentTime /
+                    audio.duration
+                ) * 100;
+
+            }
+
+
+            time.textContent =
+            formatTime(
+                audio.currentTime
+            )
+            +
+            " / "
+            +
+            formatTime(
+                audio.duration
+            );
+
+        }
+    );
+
+
+
+    /* ==========================
+       BARRA DE PROGRESSO
+    ========================== */
+
+    progress.addEventListener(
+        "input",
+        function(){
+
+            if(audio.duration){
+
+                audio.currentTime =
+                (
+                    progress.value /
+                    100
+                )
+                *
+                audio.duration;
+
+            }
+
+        }
+    );
+
+
+
+    /* ==========================
+       VOLUME
+    ========================== */
+
+    volume.addEventListener(
+        "input",
+        function(){
+
+            audio.volume =
+            Number(
+                volume.value
+            );
+
+        }
+    );
+
+
+
+    /* ==========================
+       FINAL DO ÁUDIO
+    ========================== */
+
+    audio.addEventListener(
+        "ended",
+        function(){
+
+            button.textContent =
+            "▶";
+
+            progress.value =
+            0;
+
+            box.classList.remove(
+                "playing"
+            );
+
+        }
+    );
+
+
+
+    /* ==========================
+       ERRO DE ARQUIVO
+    ========================== */
+
+    audio.addEventListener(
+        "error",
+        function(){
+
+            console.log(
+                "Não foi possível carregar:",
+                item.arquivo
+            );
+
+        }
+    );
+
+});
+
+
+
+/* =========================================================
+   FORMATA TEMPO
+========================================================= */
+
+function formatTime(seconds){
+
+    if(!isFinite(seconds)){
+
+        return "00:00";
+
+    }
+
+
+    const minutes =
+    Math.floor(
+        seconds / 60
+    );
+
+
+    const secs =
+    Math.floor(
+        seconds % 60
+    );
+
+
+    return String(minutes)
+    .padStart(2,"0")
+    +
+    ":"
+    +
+    String(secs)
+    .padStart(2,"0");
+
+}
+
+</script>
+
+
+</body>
+</html>
